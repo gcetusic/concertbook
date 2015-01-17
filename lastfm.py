@@ -2,11 +2,13 @@
 import sys
 import pylast
 import foursquare
-from couchbase import Couchbase
-from couchbase.exceptions import CouchbaseError
+from pymongo import MongoClient
+from pymongo.errors import PyMongoError
+from bson.objectid import ObjectId
 
 from settings import (
-    LASTFM_SECRET, LASTFM_KEY, HOST, BUCKET,
+    LASTFM_SECRET, LASTFM_KEY,
+    DB_HOST, DB_PORT, DB_NAME,
     FOURSQUARE_KEY, FOURSQUARE_SECRET)
 
 
@@ -17,6 +19,7 @@ def main():
     network = pylast.LastFMNetwork(api_key=LASTFM_KEY, api_secret=LASTFM_SECRET)
     artist = network.get_artist(artist_name)
     artist_info = {
+        #'_id': ObjectId(str(artist.get_mbid())),
         'name': artist.get_name(),
         'events': []
     }
@@ -48,14 +51,17 @@ def main():
         except:
             pass
 
-    db = Couchbase.connect(bucket=BUCKET, host=HOST)
+    client = MongoClient(DB_HOST, DB_PORT)
+    db = client[DB_NAME]
+    artists = db['artists']
     try:
-        db.set(artist.get_mbid(), artist_info)
-        artist = db.get(artist.get_mbid())
-    except CouchbaseError as e:
+        artist_id = artists.insert(artist_info)
+        artist = artists.find_one({"_id": ObjectId(artist_id)})
+    except PyMongoError as e:
         print "Couldn't save data", e
         raise
-    print(artist.value['events'][0]['venues'][0]['name'])
+    print(artist)
+    # print(artist.value['events'][0]['venues'][0]['name'])
 
 if __name__ == '__main__':
     main()
