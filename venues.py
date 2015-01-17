@@ -12,7 +12,7 @@ from settings import (
     FOURSQUARE_KEY, FOURSQUARE_SECRET)
 
 
-def main():
+def artist_venues(artist_name):
     artist_name = sys.argv[1]
     client = foursquare.Foursquare(
         client_id=FOURSQUARE_KEY, client_secret=FOURSQUARE_SECRET)
@@ -64,4 +64,5 @@ def main():
     # print(artist.value['events'][0]['venues'][0]['name'])
 
 if __name__ == '__main__':
-    main()
+    artist_name = sys.argv[1]
+    artist_venues()
