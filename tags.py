@@ -11,8 +11,6 @@ import sys
 
 def main():
     artists = json.loads(sys.argv[1])
-    import pprint
-    pp = pprint.PrettyPrinter(indent=4)
     tag_list = {}
     for artist_name in artists:
         r = requests.get(
@@ -28,7 +26,7 @@ def main():
                     tag_list[artist_name] = [tag['name']]
         except TypeError:
             pass
-    pp.pprint(tag_list)
+    return json.dumps(tag_list)
 
 if __name__ == '__main__':
-    main()
+    print main()
