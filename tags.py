@@ -9,8 +9,7 @@ import json
 import sys
 
 
-def main():
-    artists = json.loads(sys.argv[1])
+def main(artists):
     tag_list = {}
     for artist_name in artists:
         r = requests.get(
@@ -29,4 +28,4 @@ def main():
     return json.dumps(tag_list)
 
 if __name__ == '__main__':
-    print main()
+    print main(json.loads(sys.argv[1]))
