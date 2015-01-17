@@ -8,8 +8,10 @@ from bson.objectid import ObjectId
 
 from settings import (
     LASTFM_SECRET, LASTFM_KEY,
+    FOURSQUARE_KEY, FOURSQUARE_SECRET,
     DB_HOST, DB_PORT, DB_NAME,
-    FOURSQUARE_KEY, FOURSQUARE_SECRET)
+    EVENT_RADIUS
+)
 
 
 def artist_venues(artist_name):
@@ -30,7 +32,7 @@ def artist_venues(artist_name):
                 'query': 'pizza,coffee',
                 'll': "%s,%s" % (location['geo:lat'], location['geo:long']),
                 'intent': 'browse',
-                'radius': '1000',
+                'radius': EVENT_RADIUS * 1000,
             })['venues']
             venue_list = []
             for venue in venues:
