@@ -15,6 +15,8 @@ from settings import (
     EVENT_RADIUS
 )
 
+from tags import get_artist_tags
+
 def get_artists(artists):
     artist_list = []
     network = pylast.LastFMNetwork(api_key=LASTFM_KEY, api_secret=LASTFM_SECRET)
@@ -27,6 +29,7 @@ def get_artists(artists):
                 'about': lastfm_artist.get_bio_content(),
                 'albums': [album.item.get_name() for album in
                     lastfm_artist.get_top_albums()],
+                'tags': get_artist_tags(artist),
                 'events': []
             }
             artist_list.append(artist_info)

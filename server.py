@@ -1,5 +1,7 @@
 import sys
 import urlparse
+import json
+
 from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
 from SocketServer import ThreadingMixIn
 
@@ -20,8 +22,8 @@ class ConcertBookHandler(BaseHTTPRequestHandler):
             self.process_request(tags)
         elif parsed_params.path == "/artists":
             artists = query_parsed['artists'][0].split(',')
-            tags = get_artists(artists)
-            self.process_request(tags)
+            artists = get_artists(artists)
+            self.process_request(artists)
         else:
             # default to serve up a local file
             BaseHTTPRequestHandler.do_GET(self)
@@ -31,7 +33,7 @@ class ConcertBookHandler(BaseHTTPRequestHandler):
         self.send_header('Content-Type', 'application/json')
         self.end_headers()
 
-        self.wfile.write(result)
+        self.wfile.write(json.dumps(result))
         self.wfile.close()
 
 

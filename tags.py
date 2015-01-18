@@ -8,6 +8,16 @@ import requests
 import json
 import sys
 
+def get_artist_tags(artist_name):
+    tag_list = []
+    r = requests.get(
+        API_URL +
+        '?method=artist.getinfo&artist=%s&api_key=%s&format=json' % (
+            artist_name, LASTFM_KEY))
+    tags = r.json()['artist']['tags']['tag']
+    for tag in tags:
+        tag_list.append(tag['name'])
+    return tag_list
 
 def main(artists):
     tag_list = {}
