@@ -4,6 +4,7 @@ from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
 from SocketServer import ThreadingMixIn
 
 from tags import main
+from artists import get_artists
 
 
 class ConcertBookHandler(BaseHTTPRequestHandler):
@@ -16,6 +17,10 @@ class ConcertBookHandler(BaseHTTPRequestHandler):
         if parsed_params.path == "/tags":
             artists = query_parsed['artists'][0].split(',')
             tags = main(artists)
+            self.process_request(tags)
+        elif parsed_params.path == "/artists":
+            artists = query_parsed['artists'][0].split(',')
+            tags = get_artists(artists)
             self.process_request(tags)
         else:
             # default to serve up a local file
