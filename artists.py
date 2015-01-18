@@ -18,6 +18,31 @@ from settings import (
 from tags import get_artist_tags
 
 
+def get_artist_events(artists):
+    event_list = []
+    network = pylast.LastFMNetwork(api_key=LASTFM_KEY, api_secret=LASTFM_SECRET)
+    for artist in artists:
+        try:
+            lastfm_artist = network.get_artist(artist)
+            artist_info = {
+                #'_id': ObjectId(str(artist.get_mbid())),
+                'name': lastfm_artist.get_name(),
+                'events': [{
+                    'title': event.get_title(),
+                    'start': event.get_start_date(),
+                    'url': event.get_url(),
+                    'venue': "%s, %s" % (
+                        event.get_venue().location['city'],
+                        event.get_venue().location['country'])
+                } for event in lastfm_artist.get_upcoming_events()]
+            }
+            event_list.append(artist_info)
+        except:
+            pass
+    return event_list
+
+
+
 def get_artists(artists):
     artist_list = []
     network = pylast.LastFMNetwork(api_key=LASTFM_KEY, api_secret=LASTFM_SECRET)
