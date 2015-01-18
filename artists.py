@@ -38,6 +38,9 @@ def get_artists(artists):
                     'title': event.get_title(),
                     'start': event.get_start_date(),
                     'url': event.get_url(),
+                    'venue': "%s, %s" % (
+                        event.get_venue().location['city'],
+                        event.get_venue().location['country'])
                 } for event in lastfm_artist.get_upcoming_events()]
             }
             artist_list.append(artist_info)
