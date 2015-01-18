@@ -18,6 +18,25 @@ from settings import (
 from tags import get_artist_tags
 
 
+def get_similar_artists(artists):
+    similar_list = []
+    network = pylast.LastFMNetwork(api_key=LASTFM_KEY, api_secret=LASTFM_SECRET)
+    for artist in artists:
+        try:
+            lastfm_artist = network.get_artist(artist)
+            artist_info = {
+                #'_id': ObjectId(str(artist.get_mbid())),
+                'name': lastfm_artist.get_name(),
+                'similar': [{
+                    'name': similar_artist.item.get_name(),
+                } for similar_artist in lastfm_artist.get_similar()]
+            }
+            similar_list.append(artist_info)
+        except:
+            pass
+    return similar_list
+
+
 def get_artist_events(artists):
     event_list = []
     network = pylast.LastFMNetwork(api_key=LASTFM_KEY, api_secret=LASTFM_SECRET)
