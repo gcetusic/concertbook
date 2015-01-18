@@ -35,7 +35,7 @@ def main(artists):
                     tag_list[artist_name] = [tag['name']]
         except:
             pass
-    return json.dumps(tag_list)
+    return tag_list
 
 if __name__ == '__main__':
     print main(json.loads(sys.argv[1]))
