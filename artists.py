@@ -58,15 +58,7 @@ def get_artists(artists):
                     'release_date': album.item.get_release_date(),
                     'cover_image': album.item.get_cover_image()
                     } for album in lastfm_artist.get_top_albums()],
-                'tags': get_artist_tags(artist),
-                'events': [{
-                    'title': event.get_title(),
-                    'start': event.get_start_date(),
-                    'url': event.get_url(),
-                    'venue': "%s, %s" % (
-                        event.get_venue().location['city'],
-                        event.get_venue().location['country'])
-                } for event in lastfm_artist.get_upcoming_events()]
+                'tags': get_artist_tags(artist)
             }
             artist_list.append(artist_info)
         except:
