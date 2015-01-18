@@ -23,7 +23,7 @@ def main(artists):
                     tag_list[artist_name].append(tag['name'])
                 else:
                     tag_list[artist_name] = [tag['name']]
-        except TypeError:
+        except:
             pass
     return json.dumps(tag_list)
 
