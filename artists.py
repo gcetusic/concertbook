@@ -29,7 +29,7 @@ def get_similar_artists(artists):
                 'name': lastfm_artist.get_name(),
                 'similar': [{
                     'name': similar_artist.item.get_name(),
-                } for similar_artist in lastfm_artist.get_similar()]
+                } for similar_artist in lastfm_artist.get_similar(limit=5)]
             }
             similar_list.append(artist_info)
         except:
