@@ -1,13 +1,12 @@
 import sys
 import urlparse
-from BaseHTTPServer import HTTPServer
-from SimpleHTTPServer import SimpleHTTPRequestHandler
+from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
 from SocketServer import ThreadingMixIn
 
 from tags import main
 
 
-class ConcertBookHandler(SimpleHTTPRequestHandler):
+class ConcertBookHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         # parse query data & params to find out what was passed
         parsed_params = urlparse.urlparse(self.path)
@@ -20,10 +19,9 @@ class ConcertBookHandler(SimpleHTTPRequestHandler):
             self.process_request(tags)
         else:
             # default to serve up a local file
-            SimpleHTTPRequestHandler.do_GET(self)
+            BaseHTTPRequestHandler.do_GET(self)
 
     def process_request(self, result):
-
         self.send_response(200)
         self.send_header('Content-Type', 'application/json')
         self.end_headers()
@@ -32,12 +30,12 @@ class ConcertBookHandler(SimpleHTTPRequestHandler):
         self.wfile.close()
 
 
-class ThreadingServer(ThreadingMixIn, HTTPServer):
-    pass
+class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
+    daemon_threads = True
 
-HandlerClass = ConcertBookHandler
-ServerClass = ThreadingServer
-Protocol = "HTTP/1.0"
+Handler = ConcertBookHandler
+Server = ThreadedHTTPServer
+Protocol = "HTTP/1.1"
 
 if sys.argv[1:]:
     port = int(sys.argv[1])
@@ -45,9 +43,11 @@ else:
     port = 8000
 server_address = ('0.0.0.0', port)
 
-HandlerClass.protocol_version = Protocol
-httpd = ServerClass(server_address, HandlerClass)
+Handler.protocol_version = Protocol
+httpd = Server(server_address, Handler)
 
-sa = httpd.socket.getsockname()
-print "Serving HTTP on", sa[0], "port", sa[1], "..."
-httpd.serve_forever()
+if __name__ == '__main__':
+    sa = httpd.socket.getsockname()
+    print 'Starting server, use <Ctrl-C> to stop'
+    print "Serving HTTP on", sa[0], "port", sa[1], "..."
+    httpd.serve_forever()
