@@ -30,8 +30,9 @@ def get_artists(artists):
                 'about': lastfm_artist.get_bio_content(),
                 'albums': [{
                     'name': album.item.get_name(),
-                    'release_date': album.item.get_release_date()} for album in
-                        lastfm_artist.get_top_albums()],
+                    'release_date': album.item.get_release_date(),
+                    'cover_image': album.item.get_cover_image()
+                    } for album in lastfm_artist.get_top_albums()],
                 'tags': get_artist_tags(artist),
                 'events': []
             }
