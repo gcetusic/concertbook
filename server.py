@@ -1,7 +1,8 @@
 import sys
 import urlparse
-import BaseHTTPServer
+from BaseHTTPServer import HTTPServer
 from SimpleHTTPServer import SimpleHTTPRequestHandler
+from SocketServer import ThreadingMixIn
 
 from tags import main
 
@@ -31,8 +32,11 @@ class ConcertBookHandler(SimpleHTTPRequestHandler):
         self.wfile.close()
 
 
+class ThreadingServer(ThreadingMixIn, HTTPServer):
+    pass
+
 HandlerClass = ConcertBookHandler
-ServerClass = BaseHTTPServer.HTTPServer
+ServerClass = ThreadingServer
 Protocol = "HTTP/1.0"
 
 if sys.argv[1:]:

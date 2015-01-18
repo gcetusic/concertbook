@@ -13,11 +13,11 @@ def main(artists):
     tag_list = {}
     for artist_name in artists:
         r = requests.get(
-            API_URL + \
-                '?method=artist.getinfo&artist=%s&api_key=%s&format=json' % (
-                    artist_name, LASTFM_KEY))
-        tags = r.json()['artist']['tags']['tag']
+            API_URL +
+            '?method=artist.getinfo&artist=%s&api_key=%s&format=json' % (
+                artist_name, LASTFM_KEY))
         try:
+            tags = r.json()['artist']['tags']['tag']
             for tag in tags:
                 if artist_name in tag_list:
                     tag_list[artist_name].append(tag['name'])
