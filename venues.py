@@ -10,6 +10,32 @@ from bson.objectid import ObjectId
 from settings import FOURSQUARE_KEY, FOURSQUARE_SECRET, EVENT_RADIUS
 
 
+def get_similar_venues(location):
+    venue_list = []
+    fsquare = foursquare.Foursquare(
+        client_id=FOURSQUARE_KEY, client_secret=FOURSQUARE_SECRET)
+    try:
+        vid = fsquare.venues.search(
+            params={
+                'limit': 5,
+                'll': location,
+                'query': 'music,concert'
+            })['venues'][0]['id']
+        venues = fsquare.venues.similar(vid)['similarVenues']['items']
+        for venue in venues:
+            venue_list.append(
+                {
+                    'name': venue['name'],
+                    'location': venue['location']['formattedAddress'],
+                    'latitude': venue['location']['lat'],
+                    'longitude': venue['location']['lng'],
+                }
+            )
+    except:
+        pass
+    return venue_list
+
+
 def get_close_venues(location):
     # (location['geo:lat'], location['geo:long'])
     venue_list = []
