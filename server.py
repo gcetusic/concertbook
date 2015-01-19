@@ -7,6 +7,7 @@ from SocketServer import ThreadingMixIn
 
 from tags import main
 from artists import get_artists, get_artist_events, get_similar_artists
+from venues import get_close_venues
 
 
 class ConcertBookHandler(BaseHTTPRequestHandler):
@@ -31,6 +32,11 @@ class ConcertBookHandler(BaseHTTPRequestHandler):
         elif parsed_params.path == "/similar":
             artists = query_parsed['artists'][0].split(',')
             events = get_similar_artists(artists)
+            self.process_request(events)
+        elif parsed_params.path == "/venues":
+            location = query_parsed['events'][0]
+            print(location)
+            events = get_close_venues(location)
             self.process_request(events)
         else:
             # default to serve up a local file
