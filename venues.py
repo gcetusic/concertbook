@@ -10,7 +10,7 @@ from bson.objectid import ObjectId
 from settings import FOURSQUARE_KEY, FOURSQUARE_SECRET, EVENT_RADIUS
 
 
-def get_similar_venues(location):
+def get_similar_venues(event_location, location):
     venue_list = []
     fsquare = foursquare.Foursquare(
         client_id=FOURSQUARE_KEY, client_secret=FOURSQUARE_SECRET)
@@ -28,7 +28,7 @@ def get_similar_venues(location):
             params={
                 'radius': EVENT_RADIUS * 1000,
                 'limit': 5,
-                'll': location,
+                'll': event_location,
                 'categoryId': ','.join(category_ids)
             })['venues']
         for venue in venues:

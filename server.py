@@ -34,10 +34,12 @@ class ConcertBookHandler(BaseHTTPRequestHandler):
             venues = get_close_venues(event_location)
             self.process_request(venues)
         elif parsed_params.path == "/similar":
+            event_location = query_parsed['event'][0]
             similars = query_parsed['locations'][0].split(':')
             similar_list = []
             for similar_location in similars:
-                similar_list.extend(get_similar_venues(similar_location))
+                similar_list.extend(get_similar_venues(
+                    event_location, similar_location))
             self.process_request(similar_list)
         else:
             # default to serve up a local file
