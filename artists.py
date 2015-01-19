@@ -50,16 +50,17 @@ def get_artist_events(artists):
                     'title': event.get_title(),
                     'start': event.get_start_date(),
                     'url': event.get_url(),
-                    'venue': "%s, %s" % (
-                        event.get_venue().location['city'],
-                        event.get_venue().location['country'])
+                    'venue': {
+                        'city': event.get_venue().location['city'],
+                        'country': event.get_venue().location['country'],
+                        'location': event.get_venue().location['geo:point']
+                    }
                 } for event in lastfm_artist.get_upcoming_events()]
             }
             event_list.append(artist_info)
         except:
             pass
     return event_list
-
 
 
 def get_artists(artists):
@@ -83,6 +84,7 @@ def get_artists(artists):
         except:
             pass
     return artist_list
+
 
 def artist_venues(artist_name):
     artist_name = sys.argv[1]
