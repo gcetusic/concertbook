@@ -21,7 +21,16 @@ def get_similar_venues(location):
                 'll': location,
                 'query': 'music,concert'
             })['venues'][0]['id']
+        category_ids = [category['id'] for category in
+            fsquare.venues(vid)['venue']['categories']]
         venues = fsquare.venues.similar(vid)['similarVenues']['items']
+        venues = fsquare.venues.search(
+            params={
+                'radius': EVENT_RADIUS * 1000,
+                'limit': 5,
+                'll': location,
+                'categoryId': ','.join(category_ids)
+            })['venues']
         for venue in venues:
             venue_list.append(
                 {
