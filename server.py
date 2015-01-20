@@ -6,7 +6,7 @@ from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
 from SocketServer import ThreadingMixIn
 
 from tags import main
-from artists import get_artists, get_artist_events, get_similar_artists
+from artists import get_artists, get_artist_events
 from venues import get_close_venues, get_similar_venues
 
 

@@ -8,20 +8,11 @@ import requests
 import json
 import sys
 
-def get_artist_tags(artist_name):
-    tag_list = []
-    r = requests.get(
-        API_URL +
-        '?method=artist.getinfo&artist=%s&api_key=%s&format=json' % (
-            artist_name, LASTFM_KEY))
-    tags = r.json()['artist']['tags']['tag']
-    for tag in tags:
-        tag_list.append(tag['name'])
-    return tag_list
 
-def main(artists):
+def get_artist_tags(artists):
     tag_list = {}
     for artist_name in artists:
+        # it's more complex to get all the tagy through the library so use url
         r = requests.get(
             API_URL +
             '?method=artist.getinfo&artist=%s&api_key=%s&format=json' % (
@@ -38,4 +29,4 @@ def main(artists):
     return tag_list
 
 if __name__ == '__main__':
-    print main(json.loads(sys.argv[1]))
+    print get_artist_tags(json.loads(sys.argv[1]))
